@@ -1,0 +1,43 @@
+import React, {useState, useEffect} from 'react';
+import logo from './logo.svg';
+import './App.css';
+import axios from "axios"
+
+const Patients = () => {
+
+  const [patients, setPatients] = useState([]);
+  const fetchPatients = () => {
+    axios.get("http://localhost:8080/api/v1/patient-data").then(res => {
+      console.log(res);
+      setPatients(res.data);
+    })
+  }
+
+  useEffect( () => {
+    fetchPatients();
+  }, []);
+
+  return patients.map((patient, index) => {
+    return (
+      <div>
+          <h1>Patient Data</h1>
+          <p>First Name: {patient.firstName}</p>
+          <p>Last Name: {patient.lastName}</p>
+          <p>Cholesterol Value: {patient.cholesterolValue}</p>
+          <p>Gender: {patient.gender}</p>
+          <p>Address: {patient.address}</p>
+      </div>
+    )  
+  })
+}
+
+
+function App() {
+  return (
+    <div className="App">
+        <Patients />
+    </div>
+  );
+}
+
+export default App;
