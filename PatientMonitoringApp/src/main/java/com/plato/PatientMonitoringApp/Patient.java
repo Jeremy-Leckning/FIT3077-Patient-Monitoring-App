@@ -1,4 +1,5 @@
-import org.json.JSONException;
+package com.plato.PatientMonitoringApp;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -9,6 +10,22 @@ public class Patient {
     float cholesterolValue;
     String gender;
     String address;
+
+    public String getFirstName(){
+        return firstName;
+    }
+    public String getLastName(){
+        return lastName;
+    }
+    public float getCholesterolValue(){
+        return cholesterolValue;
+    }
+    public String getGender(){
+        return gender;
+    }
+    public String getAddress(){
+        return address;
+    }
 
     public void getCholesterolInfo() throws IOException {
         JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Patient/1?_format=json");
