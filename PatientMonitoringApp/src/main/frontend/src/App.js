@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from "axios"
+import Search from './Search'
 
 const Patients = () => {
 
@@ -19,6 +19,7 @@ const Patients = () => {
 
   return patients.map((patient, index) => {
     return (
+
       <div>
           <h1>Patient Data</h1>
           <p>First Name: {patient.firstName}</p>
@@ -31,10 +32,14 @@ const Patients = () => {
   })
 }
 
+const submitPractitionerId = (practiionerId) => {
+  console.log(practiionerId)
+}
 
 function App() {
   return (
     <div className="App">
+      <Search />
         <Patients />
     </div>
   );
