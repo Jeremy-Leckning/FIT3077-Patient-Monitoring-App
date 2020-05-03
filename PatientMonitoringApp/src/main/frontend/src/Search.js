@@ -1,12 +1,23 @@
 import React, { Component } from 'react'
+import axios from "axios"
 
 class Search extends Component {
     constructor() {
         super();
         this.state = {
-            practitionerId: ''
+            practitionerId: '',
+            patientList: []
         };
         this.updatePractitionerId = this.updatePractitionerId.bind(this)
+    }
+
+    getPatientList = () => {
+        axios.get("http://localhost:8080/api/v1/patient-list?practitionerId="+this.state.practitionerId).then(res => {
+            console.log(res);
+            this.setState({
+                patientList: res.data
+            })
+        })
     }
 
     updatePractitionerId(e) {
@@ -17,10 +28,9 @@ class Search extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.practitionerId)
+        console.log(this.state.practitionerId);
+        this.getPatientList();
     }
-
-
 
     render() { 
         return <div>
@@ -31,6 +41,7 @@ class Search extends Component {
                     <input type="submit" value = "Search"/>
                 </label>
             </form>
+            <h1>Patient List: {this.state.patientList.length?this.state.patientList:"[]"}</h1>
         </div>
         
 
