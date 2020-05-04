@@ -26,5 +26,4 @@ public class PatientService {
 
         return healthPractitioner.getPatientList();
     }
-
 }
