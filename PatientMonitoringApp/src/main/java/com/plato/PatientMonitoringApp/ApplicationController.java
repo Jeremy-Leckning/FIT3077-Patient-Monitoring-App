@@ -1,5 +1,6 @@
 package com.plato.PatientMonitoringApp;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,11 @@ public class ApplicationController {
     }
 
     @RequestMapping("/patient-list")
-    public Set<String> getPatientList(@RequestParam(name="practitionerId", required = false, defaultValue = "29165") String practitionerId) throws IOException {
-        healthPractitioner.setHealthPractitionerId(practitionerId);
+    public Set<String> getPatientList(@RequestParam(name="practitionerIdentifier", required = false, defaultValue = "500") String practitionerIdentifier) throws IOException {
+        healthPractitioner.setHealthPractitionerId(practitionerIdentifier);
 
         PatientEncounter patientEncounter = new PatientEncounterService();
-        Set<String> patientList = patientEncounter.getEncounters(practitionerId);
+        Set<String> patientList = patientEncounter.getEncounters(practitionerIdentifier);
 
         healthPractitioner.setPatientList(patientList);
         return patientList;
@@ -39,9 +40,9 @@ public class ApplicationController {
     }
 
     @RequestMapping("/patient-cholesterol")
-    public String getPatientCholesterol() throws IOException {
+    public String getPatientCholesterol(@RequestParam(name="patientId", required = false) String patientId) throws IOException {
         PatientCholesterol patientCholesterol = new PatientCholesterolService();
 
-        return patientCholesterol.getCholesterol();
+        return patientCholesterol.getCholesterol(patientId);
     }
 }

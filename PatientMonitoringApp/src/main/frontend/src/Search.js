@@ -1,83 +1,62 @@
 import React, { Component } from 'react'
 import axios from "axios"
 import './table.css'
+import Table from './Table'
 
 class Search extends Component {
-    constructor() {
-        super();
-        this.state = {
-            practitionerId: '',
-            patientList: []
-        };
-        this.updatePractitionerId = this.updatePractitionerId.bind(this)
+    constructor(props) {
+        super(props);
     }
 
-    test = [];
-    getPatientList = () => {
-        axios.get("http://localhost:8080/api/v1/patient-data?practitionerId="+this.state.practitionerId).then(res => {
-            this.setState({
-                patientList: this.state.patientList.concat(res.data[0])
-              })
-            console.log(this.state.patientList[0]);
+    getPatientList = (e) => {
+        console.log("gettingPatientList")
+        axios.get("http://localhost:8080/api/v1/patient-list?practitionerIdentifier="+this.props.practitionerIdentifier).then(res => {
+            console.log(res)
+            this.props.updatePatientList(res.data)
         })
     }
 
-    updatePractitionerId(e) {
-        this.setState({
-            practitionerId: e.target.value
-        })
-    };
+    updatepractitionerIdentifier = (e) => {
+        this.props.updatePractitionerIdentifier(e.target.value)
+      };
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.practitionerId);
-        this.getPatientList();
+        this.getPatientList(e);
     }
 
-    renderTableData() {
-        return this.state.patientList.map((patient, index) => {
-           return (
-              <tr key={patient.lastName}>
-                 <td>{patient.firstName}</td>
-                 <td>{patient.cholesterolValue}</td>
-                 <td>{patient.date}</td>
-              </tr>
-           )
-        })
-     }
+    updateMonitoredPatientList = (e) => {
+        this.props.updateMonitoredPatientList(e.target.value)
+    }
 
-     renderTableHeader() {
-           return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th></tr>
-     }
-  
-  
+
 
     render() { 
         return <div>
-            <h1>Hello {this.state.practitionerId}</h1>
+            <h1>Hello {this.props.practitionerIdentifier}</h1>
             <form onSubmit={this.handleSubmit}>
                 <label>Practitioner ID:
-                    <input type="text" value={this.state.practitionerId} required onChange={this.updatePractitionerId}/>
+                    <input type="text" value={this.props.practitionerIdentifier} required onChange={this.updatepractitionerIdentifier}/>
                     <input type="submit" value = "Search"/>
                 </label>
             </form>
-            {/* <h1>Patient List: {this.state.patientList.length?this.state.patientList:"[]"}</h1> */}
-   
-            {/* {this.state.patientList.map((patient, index) => (
-                <p>Patient name: {patient.firstName} {patient.lastName}, Total cholesterol: {patient.cholesterolValue}, DATE: {patient.date}!</p>
-            ))}  */}
 
-        <h1 id='title'>Monitored Patients</h1>
-            <table id='patients'>
-               <tbody>
-               {this.renderTableHeader()}
-                {this.renderTableData()}
-               </tbody>
-            </table>
-            
+            <h1 id='title'>All Patients</h1>
+                <table id='patients'>
+                    <tbody>
+                        <tr><th key={0}>NAME</th><th key={0}>ACTION</th><th key={0}>EXTRA</th></tr>
+                        {!!this.props.patientList.length && this.props.patientList.map((patient, index) => {
+                        return (
+                            <tr key={patient}>
+                                <td>{JSON.parse(patient).patientName}</td>
+                                <td><button value={patient} onClick={this.updateMonitoredPatientList}>Add to monitor</button></td>
+                                <td><button>Get Patient Details</button></td>
+                            </tr>
+                        )
+                        })}
+                    </tbody>
+                </table>
         </div>
-        
-
     }
 }
 

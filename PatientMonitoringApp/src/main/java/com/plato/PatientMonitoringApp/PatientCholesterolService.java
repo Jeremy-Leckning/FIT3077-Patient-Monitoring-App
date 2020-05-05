@@ -7,8 +7,9 @@ import java.util.HashMap;
 
 public class PatientCholesterolService implements PatientCholesterol {
     @Override
-    public String getCholesterol() throws IOException {
-        JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Observation?_count=10&code=2093-3&patient=1&_sort=-date&_format=json");
+    public String getCholesterol(String patientId) throws IOException {
+        JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Observation?_count=10&code=2093-3&patient="+
+                patientId+"&_sort=-date&_format=json");
 
         String effectiveDateTime = json.getJSONArray("entry").getJSONObject(0).getJSONObject("resource").getString("effectiveDateTime");
         System.out.println("Date:" + effectiveDateTime);
