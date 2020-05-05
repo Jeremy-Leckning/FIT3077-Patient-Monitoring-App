@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -12,20 +13,35 @@ import java.util.Set;
 @CrossOrigin("*")
 public class ApplicationController {
 
-    private final PatientService patientService;
+    private final HealthPractitioner healthPractitioner;
 
     @Autowired
-    public ApplicationController(PatientService patientService) {
-        this.patientService = patientService;
-    }
-
-    @RequestMapping("/patient-data")
-    public List<Patient> getPatientData() throws IOException {
-        return patientService.getPatientData();
+    public ApplicationController(HealthPractitioner healthPractitioner) {
+        this.healthPractitioner = healthPractitioner;
     }
 
     @RequestMapping("/patient-list")
     public Set<String> getPatientList(@RequestParam(name="practitionerId", required = false, defaultValue = "29165") String practitionerId) throws IOException {
-        return patientService.getPatientList(practitionerId);
+        healthPractitioner.setHealthPractitionerId(practitionerId);
+
+        PatientEncounter patientEncounter = new PatientEncounterService();
+        Set<String> patientList = patientEncounter.getEncounters(practitionerId);
+
+        healthPractitioner.setPatientList(patientList);
+        return patientList;
+    }
+
+    @RequestMapping("/patient-data")
+    public String getPatientData() throws IOException {
+        PatientInfo patientInfo = new PatientInfoService();
+
+        return patientInfo.getInfo();
+    }
+
+    @RequestMapping("/patient-cholesterol")
+    public String getPatientCholesterol() throws IOException {
+        PatientCholesterol patientCholesterol = new PatientCholesterolService();
+
+        return patientCholesterol.getCholesterol();
     }
 }
