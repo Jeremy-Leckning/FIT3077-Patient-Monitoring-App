@@ -26,7 +26,7 @@ class Table extends Component {
      }
 
      renderTableHeader() {
-           return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th></tr>
+           return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th><th key={3}>EXTRA</th></tr>
      }
   
   
@@ -45,6 +45,7 @@ class Table extends Component {
                                 <td>{patientObject.patientName}</td>
                                 <td>{patientObject.data?patientObject.data.cholesterolValue:"-"}</td>
                                 <td>{patientObject.data?patientObject.data.effectiveDateTime:"-"}</td>
+                                <td><button>Get Patient Details</button></td>
                             </tr>
                         )
                         })}

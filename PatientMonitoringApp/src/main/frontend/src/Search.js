@@ -43,7 +43,7 @@ class Search extends Component {
             <h1 id='title'>All Patients</h1>
                 <table id='patients'>
                     <tbody>
-                        <tr><th key={0}>NAME</th><th key={0}>ACTION</th><th key={0}>EXTRA</th></tr>
+                        <tr><th key={0}>NAME</th><th key={1}>ACTION</th></tr>
                         {!!this.props.patientList.length && this.props.patientList.map((patient, index) => {
                             console.log(this.props.patientList)
                             console.log(patient)
@@ -51,7 +51,6 @@ class Search extends Component {
                             <tr key={patient}>
                                 <td>{patient.patientName}</td>
                         <td><button value={JSON.stringify(patient)} onClick={this.updateMonitoredPatientList}>{!patient.inMonitored?"Add to monitor":"Remove from monitor"}</button></td>
-                                <td><button>Get Patient Details</button></td>
                             </tr>
                         )
                         })}
