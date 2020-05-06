@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from "axios"
 import './table.css'
-import Table from './Table'
 
 class Search extends Component {
     constructor(props) {
@@ -46,10 +45,12 @@ class Search extends Component {
                     <tbody>
                         <tr><th key={0}>NAME</th><th key={0}>ACTION</th><th key={0}>EXTRA</th></tr>
                         {!!this.props.patientList.length && this.props.patientList.map((patient, index) => {
+                            console.log(this.props.patientList)
+                            console.log(patient)
                         return (
                             <tr key={patient}>
-                                <td>{JSON.parse(patient).patientName}</td>
-                                <td><button value={patient} onClick={this.updateMonitoredPatientList}>Add to monitor</button></td>
+                                <td>{patient.patientName}</td>
+                        <td><button value={JSON.stringify(patient)} onClick={this.updateMonitoredPatientList}>{!patient.inMonitored?"Add to monitor":"Remove from monitor"}</button></td>
                                 <td><button>Get Patient Details</button></td>
                             </tr>
                         )

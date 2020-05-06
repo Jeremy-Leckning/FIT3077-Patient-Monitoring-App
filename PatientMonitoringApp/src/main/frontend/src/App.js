@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './App.css';
 import Search from './Search'
 import Table from './Table'
-import Patient from './Patient'
 import axios from "axios"
 
 class App extends Component {
@@ -28,17 +27,53 @@ updatePractitionerIdentifier(identifier){
 
 updatePatientList(patient){
   this.setState({
+    monitoredPatientList: []
+  })
+  for (var i = 0; i < patient.length; i++) {
+    console.log(patient[i]);
+    var parsedJSON = JSON.parse(patient[i])
+    parsedJSON.inMonitored = false
+    patient[i] = parsedJSON
+}
+console.log(patient)
+  this.setState({
     patientList: patient
   })
 }
 
 updateMonitoredPatientList = async (patient) => {
   console.log(JSON.parse(patient))
-  await axios.get("http://localhost:8080/api/v1/patient-cholesterol?patientId="+JSON.parse(patient).patientId).then(res => {
-    this.setState({
-      monitoredPatientList: [...this.state.monitoredPatientList, {patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: res.data}]
+
+  var patientInMonitored = JSON.parse(patient).inMonitored
+
+  if (!patientInMonitored) {
+    await axios.get("http://localhost:8080/api/v1/patient-cholesterol?patientId="+JSON.parse(patient).patientId).then(res => {
+      this.setState({
+        monitoredPatientList: [...this.state.monitoredPatientList, {patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: res.data}]
+      })
+      for (var i = 0; i < this.state.patientList.length; i++) {
+        console.log(this.state.patientList[i]);
+        if (this.state.patientList[i].patientId === JSON.parse(patient).patientId){
+          this.state.patientList[i].inMonitored = !this.state.patientList[i].inMonitored
+          this.forceUpdate()
+        }
+    }
     })
-  })
+  } else {
+    console.log("im removing")
+
+    var array = [...this.state.monitoredPatientList]; // make a separate copy of the array
+    var pos = array.map(function(e) { return e.patientId; }).indexOf(JSON.parse(patient).patientId);
+    if (pos !== -1) {
+      array.splice(pos, 1);
+      this.setState({monitoredPatientList: array});
+
+      array = [...this.state.patientList]
+      pos = array.map(function(e) { return e.patientId; }).indexOf(JSON.parse(patient).patientId);
+      this.state.patientList[pos].inMonitored = !this.state.patientList[pos].inMonitored
+      this.forceUpdate()
+    }
+  }
 }
   render() {
     return (

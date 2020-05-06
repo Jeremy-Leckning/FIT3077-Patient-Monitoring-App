@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import axios from "axios"
 import './table.css'
-import Search from './Search'
 
 class Table extends Component {
     constructor(props) {
