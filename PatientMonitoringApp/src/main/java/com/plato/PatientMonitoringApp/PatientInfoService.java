@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class PatientInfoService implements PatientInfo {
     @Override
-    public String getInfo() throws IOException {
-        JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Patient/106582?_format=json");
+    public String getInfo(String patientId) throws IOException {
+        JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Patient/"+patientId+"?_format=json");
         String firstName = json.getJSONArray("name").getJSONObject(0).getJSONArray("given").getString(0);
         System.out.println("FirstName:" + firstName);
 

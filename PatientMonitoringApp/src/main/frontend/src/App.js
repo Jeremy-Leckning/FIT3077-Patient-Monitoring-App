@@ -57,11 +57,12 @@ updateMonitoredPatientList = async (patient) => {
     const resOne = responses[0]
     const resTwo = responses[1]
 
+    console.log("RESPONSE 2")
+    console.log(resTwo)
+
       this.setState({
         monitoredPatientList: [...this.state.monitoredPatientList, {patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: resOne.data, info: resTwo.data}]
       })
-      console.log("patientInfo")
-      console.log(this.state.monitoredPatientList)
 
 
       for (var i = 0; i < this.state.patientList.length; i++) {
@@ -71,6 +72,8 @@ updateMonitoredPatientList = async (patient) => {
           this.forceUpdate()
         }
       }
+      console.log("patientInfo")
+      console.log(this.state.monitoredPatientList)
 
   })
   )
