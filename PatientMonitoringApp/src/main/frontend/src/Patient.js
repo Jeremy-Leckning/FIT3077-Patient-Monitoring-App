@@ -11,6 +11,7 @@ class Patient extends Component {
 
     fetchPatients = () => {
         axios.get("http://localhost:8080/api/v1/patient-data").then(res => {
+            console.log("WHAT THIS")
             console.log(res);
             this.setState({
                 patientList: res.data

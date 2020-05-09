@@ -40,7 +40,7 @@ public class ApplicationController {
     }
 
     @RequestMapping("/patient-cholesterol")
-    public String getPatientCholesterol(@RequestParam(name="patientId", required = false) String patientId) throws IOException {
+    public String getPatientCholesterol(@RequestParam(name="patientId", required = false, defaultValue = "1") String patientId) throws IOException {
         PatientCholesterol patientCholesterol = new PatientCholesterolService();
 
         return patientCholesterol.getCholesterol(patientId);

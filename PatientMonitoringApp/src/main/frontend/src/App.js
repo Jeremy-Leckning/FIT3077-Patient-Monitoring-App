@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
         practitionerIdentifier: '500',
         patientList: [],
-        monitoredPatientList: []
+        monitoredPatientList: [],
+        patientInfo: []
     };
     this.updatePractitionerIdentifier = this.updatePractitionerIdentifier.bind(this);
     this.updatePatientList = this.updatePatientList.bind(this);
@@ -35,7 +36,6 @@ updatePatientList(patient){
     parsedJSON.inMonitored = false
     patient[i] = parsedJSON
 }
-console.log(patient)
   this.setState({
     patientList: patient
   })
@@ -47,19 +47,36 @@ updateMonitoredPatientList = async (patient) => {
   var patientInMonitored = JSON.parse(patient).inMonitored
 
   if (!patientInMonitored) {
-    await axios.get("http://localhost:8080/api/v1/patient-cholesterol?patientId="+JSON.parse(patient).patientId).then(res => {
+  let urlOne = "http://localhost:8080/api/v1/patient-cholesterol?patientId="+JSON.parse(patient).patientId
+  let urlTwo = "http://localhost:8080/api/v1/patient-data?patientId="+JSON.parse(patient).patientId
+
+  const requestOne = axios.get(urlOne)
+  const requestTwo = axios.get(urlTwo)
+
+  await axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+    const resOne = responses[0]
+    const resTwo = responses[1]
+
       this.setState({
-        monitoredPatientList: [...this.state.monitoredPatientList, {patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: res.data}]
+        monitoredPatientList: [...this.state.monitoredPatientList, {patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: resOne.data, info: resTwo.data}]
       })
+      console.log("patientInfo")
+      console.log(this.state.monitoredPatientList)
+
+
       for (var i = 0; i < this.state.patientList.length; i++) {
         console.log(this.state.patientList[i]);
         if (this.state.patientList[i].patientId === JSON.parse(patient).patientId){
           this.state.patientList[i].inMonitored = !this.state.patientList[i].inMonitored
           this.forceUpdate()
         }
-    }
-    })
-  } else {
+      }
+
+  })
+  )
+
+}
+  else {
     console.log("im removing")
 
     var array = [...this.state.monitoredPatientList]; // make a separate copy of the array

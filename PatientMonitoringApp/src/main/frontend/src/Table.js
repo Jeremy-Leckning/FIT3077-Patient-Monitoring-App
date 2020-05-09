@@ -13,22 +13,21 @@ class Table extends Component {
         })
     }
     
-    renderTableData() {
-        return this.state.patientList.map((patient, index) => {
-           return (
-              <tr key={patient.lastName}>
-                 <td>{patient.firstName}</td>
-                 <td>{patient.cholesterolValue}</td>
-                 <td>{patient.date}</td>
-              </tr>
-           )
-        })
-     }
+    // renderTableData() {
+    //     return this.state.patientList.map((patient, index) => {
+    //        return (
+    //           <tr key={patient.lastName}>
+    //              <td>{patient.firstName}</td>
+    //              <td>{patient.cholesterolValue}</td>
+    //              <td>{patient.date}</td>
+    //           </tr>
+    //        )
+    //     })
+    //  }
 
      renderTableHeader() {
            return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th><th key={3}>EXTRA</th></tr>
      }
-  
   
 
     render() { 
@@ -45,7 +44,7 @@ class Table extends Component {
                                 <td>{patientObject.patientName}</td>
                                 <td>{patientObject.data?patientObject.data.cholesterolValue:"-"}</td>
                                 <td>{patientObject.data?patientObject.data.effectiveDateTime:"-"}</td>
-                                <td><button>Get Patient Details</button></td>
+                                <td><button onClick={() => alert("Patient ID: " + patientObject.patientId + "\nBirth Date:" + "\nGender: " + patientObject.info.gender +  "\nAddress: " + patientObject.info.address)}>Get Patient Details</button></td>
                             </tr>
                         )
                         })}
