@@ -24,9 +24,20 @@ public class PatientInfoService implements PatientInfo {
 
         String address = json.getJSONArray("address").getJSONObject(0).getJSONArray("line").getString(0) + " " +
                 "" + json.getJSONArray("address").getJSONObject(0).getString("city") + " " +
-                "" + json.getJSONArray("address").getJSONObject(0).getString("state")+ " " +
-                "" + json.getJSONArray("address").getJSONObject(0).getString("postalCode")+ " " +
-                "" + json.getJSONArray("address").getJSONObject(0).getString("country");
+                "" + json.getJSONArray("address").getJSONObject(0).getString("state")+ " ";
+
+        String address2 = "";
+        try {
+            address2 = "" + json.getJSONArray("address").getJSONObject(0).getString("postalCode")+ " " +
+                    "" + json.getJSONArray("address").getJSONObject(0).getString("country");
+        }
+        catch (Exception e)
+        {
+            address2 = "" + json.getJSONArray("address").getJSONObject(0).getString("country");
+        }
+
+        address += address2;
+
         System.out.println("Address:" + address);
 
         String birthDate = json.getString("birthDate");
