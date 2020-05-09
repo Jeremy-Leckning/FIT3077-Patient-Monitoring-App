@@ -44,7 +44,7 @@ class Table extends Component {
                                 <td>{patientObject.patientName}</td>
                                 <td>{patientObject.data?patientObject.data.cholesterolValue:"-"}</td>
                                 <td>{patientObject.data?patientObject.data.effectiveDateTime:"-"}</td>
-                                <td><button onClick={() => alert("Patient ID: " + patientObject.patientId + "\nBirth Date:" + "\nGender: " + patientObject.info.gender +  "\nAddress: " + patientObject.info.address)}>Get Patient Details</button></td>
+                                <td><button onClick={() => alert("Patient ID: " + patientObject.patientId + "\nBirth Date: " + patientObject.info.birthDate + "\nGender: " + patientObject.info.gender +  "\nAddress: " + patientObject.info.address)}>Get Patient Details</button></td>
                             </tr>
                         )
                         })}

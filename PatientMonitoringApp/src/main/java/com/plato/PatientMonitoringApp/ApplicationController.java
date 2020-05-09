@@ -33,7 +33,7 @@ public class ApplicationController {
     }
 
     @RequestMapping("/patient-data")
-    public String getPatientData(@RequestParam(name="patientId", required = false, defaultValue = "1") String patientId) throws IOException {
+    public String getPatientData(@RequestParam(name="patientId", required = false, defaultValue = "93991") String patientId) throws IOException {
         PatientInfo patientInfo = new PatientInfoService();
 
         return patientInfo.getInfo(patientId);

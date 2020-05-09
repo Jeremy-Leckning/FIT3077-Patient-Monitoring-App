@@ -29,11 +29,15 @@ public class PatientInfoService implements PatientInfo {
                 "" + json.getJSONArray("address").getJSONObject(0).getString("country");
         System.out.println("Address:" + address);
 
+        String birthDate = json.getString("birthDate");
+        System.out.println("BirthDate: " + birthDate);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firstName", firstName);
         jsonObject.put("lastName", lastName);
         jsonObject.put("gender", gender);
         jsonObject.put("address", address);
+        jsonObject.put("birthDate", birthDate);
 
         return jsonObject.toString();
     }
