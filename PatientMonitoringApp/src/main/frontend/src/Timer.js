@@ -43,6 +43,7 @@ updateMonitoredFrequency() {
     this.setState({
       time: this.state.cholesterolUpdateFrequency
     })
+    clearInterval(this.timer)
     this.timer = setInterval(() => {
       if (!this.state.time) {
         console.log("Restarting Timer")
