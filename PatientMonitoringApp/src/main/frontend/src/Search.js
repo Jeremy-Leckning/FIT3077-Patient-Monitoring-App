@@ -10,7 +10,6 @@ class Search extends Component {
     getPatientList = (e) => {
         console.log("gettingPatientList")
         axios.get("http://localhost:8080/api/v1/patient-list?practitionerIdentifier="+this.props.practitionerIdentifier).then(res => {
-            console.log(res)
             this.props.updatePatientList(res.data)
         })
     }
@@ -45,8 +44,6 @@ class Search extends Component {
                     <tbody>
                         <tr><th key={0}>NAME</th><th key={1}>ACTION</th></tr>
                         {!!this.props.patientList.length && this.props.patientList.map((patient, index) => {
-                            console.log(this.props.patientList)
-                            console.log(patient)
                         return (
                             <tr key={patient}>
                                 <td>{patient.patientName}</td>

@@ -6,12 +6,12 @@ class Table extends Component {
         super(props);
     }
 
-    updateMonitoredPatientList = (patient) => {
-        console.log(patient)
-        this.setState({
-            monitoredPatientList: this.state.monitoredPatientList.concat(patient)
-        })
-    }
+    // updateMonitoredPatientList = (patient) => {
+    //     console.log(patient)
+    //     this.setState({
+    //         monitoredPatientList: this.state.monitoredPatientList.concat(patient)
+    //     })
+    // }
     
     // renderTableData() {
     //     return this.state.patientList.map((patient, index) => {
@@ -38,7 +38,6 @@ class Table extends Component {
                {this.renderTableHeader()}
                {/* {this.state.search && this.getPatientCholesterol()} */}
                {!!this.props.monitoredPatientList.length && this.props.monitoredPatientList.map(function(patientObject){
-                        console.log(patientObject)
                         return (
                             <tr>
                                 <td>{patientObject.patientName}</td>
