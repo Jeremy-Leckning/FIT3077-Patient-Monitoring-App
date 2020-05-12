@@ -1,9 +1,6 @@
 package com.plato.PatientMonitoringApp;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-
+//Stores information about a patient (might be used in the future)
 public class Patient {
     String firstName;
     String lastName;

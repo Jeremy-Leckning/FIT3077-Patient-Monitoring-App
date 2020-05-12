@@ -16,7 +16,7 @@ class Patient extends Component {
             this.setState({
                 patientList: res.data
             })
-        })
+        }).catch(err => {alert(err)})
     }
     
     render() {
