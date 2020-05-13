@@ -1,5 +1,6 @@
-package com.plato.PatientMonitoringApp;
+package com.plato.PatientMonitoringApp.FHIR;
 
+import com.plato.PatientMonitoringApp.HTTP.HttpService;
 import org.json.JSONObject;
 import java.io.IOException;
 

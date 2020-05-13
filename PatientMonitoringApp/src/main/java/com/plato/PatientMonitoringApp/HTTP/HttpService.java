@@ -1,4 +1,4 @@
-package com.plato.PatientMonitoringApp;
+package com.plato.PatientMonitoringApp.HTTP;
 
 import org.json.JSONException;
 import org.json.JSONObject;

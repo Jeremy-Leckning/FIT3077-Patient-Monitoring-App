@@ -1,4 +1,4 @@
-package com.plato.PatientMonitoringApp;
+package com.plato.PatientMonitoringApp.FHIR;
 
 import java.io.IOException;
 import java.util.Map;
