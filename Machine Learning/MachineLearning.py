@@ -1,6 +1,6 @@
 """
 DecisionTree algorithm to predict whether a patient has high or low cholesterol
-FIT3077 - Bonus Task
+FIT3077 Assignment 2 - Bonus Task
 """
 
 
@@ -272,17 +272,11 @@ if __name__ == "__main__":
 
         prediction = DT.predict([X[0], X[1], X[2], X[3]])
 
-        if prediction:
-            totalOnes += 1
-        else:
-            totalZeros += 1
-
         if prediction == int(Y):
             totalCorrect += 1
 
     percentageAccuracy = totalCorrect / len(Y_test)
 
     print(totalCorrect)
-    print(totalOnes)
-    print(totalZeros)
+
     print("Percentage accuracy: " + str(percentageAccuracy))
