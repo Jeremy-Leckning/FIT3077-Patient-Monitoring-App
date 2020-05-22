@@ -3,17 +3,20 @@ DecisionTree algorithm to predict whether a patient has high or low cholesterol
 FIT3077 Assignment 2 - Bonus Task
 """
 
-
 import math
 
 
 def read_patientFile(filename):
+    """
+    reads the raw data of a patient file and converts it into binary format
+    @param filename: file containing raw data
+    """
     input_file = open(filename,'r')
     data_file = input_file.readlines()
     input_file.close()
 
     X_data = []  # predictors data
-    Y_data = []  # label data
+    Y_data = []  # output data (high/low cholesterol)
 
     for line in data_file:
         line = line[1:-2]
@@ -70,18 +73,24 @@ def read_patientFile(filename):
     return X_data, Y_data
 
 
+"""
+Note: Part of the Machine Learning Algorithm below has been used in a previous unit (FIT3080) by one of the students
+working on this assignment and has been adapted from there.
+"""
+
+
 class Node:
     """
     Decision tree node
     """
     def __init__(self, attribute=None, left=None, right=None, label=None):
         """
-        @param attribute: the attribute of the node(index in this context)
+        @param attribute: the attribute of the node(index in the binary file)
         @param left: left child of node
         @param right: right child of node
         @param label: represents the answer in binary form (0 if low cholesterol, 1 if high cholesterol)
         """
-        self.attribute = attribute  # index(integer) representing the attribute
+        self.attribute = attribute
         self.left = left
         self.right = right
         self.label = label
@@ -93,11 +102,11 @@ class DecisionTree:
     cholesterol
     """
     def __init__(self):
-        self.root=None
+        self.root = None
 
-    def calc_entropy(self, pos, neg):
+    def calculate_entropy(self, pos, neg):
         """
-        Calculates the entropy given the number of positives and negatives in a binary dataset
+        Calculates the entropy given the number of positives and negatives in a binary data set
         @param pos: number of positives(1s)
         @param neg: number of negatives(0s)
         @return: entropy value
@@ -108,10 +117,10 @@ class DecisionTree:
         entropy = -((pos/total) * math.log(pos/total, 2)) - ((neg/total) * math.log(neg/total, 2))
         return entropy
 
-    def entropy_system(self, Y_train):
+    def calculate_systemEntropy(self, Y_train):
         """
         Calculates the total entropy of training data
-        @param Y_train: the labels values of training data
+        @param Y_train: output training data values of training data
         @return: entropy of system
         """
         total_pos = 0
@@ -122,17 +131,17 @@ class DecisionTree:
                 total_neg += 1
             elif Y_train[m] == 1:
                 total_pos += 1
-        S_entropy = self.calc_entropy(total_pos, total_neg)
+        S_entropy = self.calculate_entropy(total_pos, total_neg)
         return S_entropy
 
-    def information_gain(self, X_train, Y_train):
+    def calculate_InfoGain(self, X_train, Y_train):
         """
         Calculates the information gain of a given set of data and returns the attribute and its max information gain for that set of data
-        @param X_train: unlabeled data To calculate information gain for that set of data
-        @param Y_train: Label To calculate information gain for that set of data
+        @param X_train: input train data used to calculate information gain for that set of data
+        @param Y_train: expected outcome train data
         @return: max information gain along with the corresponding attribute
         """
-        S_entropy = self.entropy_system(Y_train)
+        S_entropy = self.calculate_systemEntropy(Y_train)
         length = len(Y_train)
 
         # Keeping track of the amount of times a positive(1)/negative(0) gives the label positive(1), negative(0) for each column of data.
@@ -156,9 +165,9 @@ class DecisionTree:
                             positiveGivesNegative += 1
                         elif Y_train[i] == 1:
                             positiveGivesPositive += 1
-                info_gain = S_entropy - (((negativeGivesNegative+negativeGivesPositive)/length) * self.calc_entropy(negativeGivesPositive, negativeGivesNegative)) - (((positiveGivesNegative+positiveGivesPositive)/length) * self.calc_entropy(positiveGivesPositive, positiveGivesNegative))
+                info_gain = S_entropy - (((negativeGivesNegative+negativeGivesPositive)/length) * self.calculate_entropy(negativeGivesPositive, negativeGivesNegative)) - (((positiveGivesNegative + positiveGivesPositive) / length) * self.calculate_entropy(positiveGivesPositive, positiveGivesNegative))
 
-                # Resetting variables for next iteration
+                # Resetting variables
                 negativeGivesPositive = 0
                 negativeGivesNegative = 0
                 positiveGivesPositive = 0
@@ -173,20 +182,20 @@ class DecisionTree:
     def train(self, X_train, Y_train):
         """
         builds up the DecisionTree
-        @param X_train: unlabeled train data
-        @param Y_train: labeled train data
+        @param X_train: input train data
+        @param Y_train: expected outcome train data
         @return: None
         """
-        index, max_info_gain = self.information_gain(X_train, Y_train)
+        index, max_info_gain = self.calculate_InfoGain(X_train, Y_train)
 
         self.root = Node(index)
-        self.split(X_train, Y_train, self.root)  # recursive call
+        self.split(X_train, Y_train, self.root)  # start of recursive call
 
     def split(self, X_train, Y_train, node):
         """
         recursive function to split data by using a information gain heuristic approach for choosing next attribute
-        @param X_train: unlabeled train data
-        @param Y_train: labeled train data
+        @param X_train: input train data
+        @param Y_train: expected outcome train data
         @param node: the node we are currently splitting
         @return: None
         """
@@ -221,8 +230,8 @@ class DecisionTree:
                 right_X.append(X_train[i])
                 right_Y.append(Y_train[i])
 
-        index_left, left_InformationGainValue = self.information_gain(left_X, left_Y)
-        index_right, right_InformationGainValue = self.information_gain(right_X, right_Y)
+        index_left, left_InformationGainValue = self.calculate_InfoGain(left_X, left_Y)
+        index_right, right_InformationGainValue = self.calculate_InfoGain(right_X, right_Y)
 
         left_node = Node(index_left)
         right_node = Node(index_right)
@@ -232,11 +241,10 @@ class DecisionTree:
         self.split(left_X, left_Y, left_node)
         self.split(right_X, right_Y, right_node)
 
-
     def predict(self, X_input):
         """
         predicts whether a patient has high cholesterol or low cholesterol
-        @param X_input: unlabeled set of data
+        @param X_input: input binary data
         @return: the prediction (1 if high cholesterol, 0 otherwise)
         """
         current = self.root
@@ -260,12 +268,9 @@ if __name__ == "__main__":
     X_test = X[int(0.7*(len(X))):]
     Y_test = Y[int(0.7*(len(Y))):]
 
-
     DT.train(X_train, Y_train)
 
-    totalOnes = 0
     totalCorrect = 0
-    totalZeros = 0
     for i in range(len(Y_test)):
         X = X_test[i]
         Y = Y_test[i]
@@ -277,6 +282,5 @@ if __name__ == "__main__":
 
     percentageAccuracy = totalCorrect / len(Y_test)
 
-    print(totalCorrect)
 
     print("Percentage accuracy: " + str(percentageAccuracy))
