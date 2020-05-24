@@ -90,7 +90,7 @@ while next_page == True and count_page<150:
 
     myList = data.values.tolist()
 
-    with open('data.txt', 'w') as f:
+        with open('data.txt', 'w') as f:
         for item in myList:
             f.write("%s\n" % item)
 
