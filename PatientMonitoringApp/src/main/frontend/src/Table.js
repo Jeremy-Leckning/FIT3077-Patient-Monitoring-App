@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './table.css'
+import Graph from './Graph'
 
 class Table extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class Table extends Component {
     renderTableHeader() {
         console.log(this.state.tableView)
         if (this.state.tableView .match('Cholesterol Graph')) {
-            return <h1>SHOW CHOLESTEROL GRAPH HERE</h1>
+            return <Graph/>
         } else if (this.state.tableView.match('Cholesterol Table')){
             return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th><th key={3}>EXTRA</th></tr>
         } else if (this.state.tableView.match('Blood Pressure Table')){
