@@ -5,7 +5,7 @@ var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 
-class App extends Component {	
+class Graph extends Component {	
   render() {
     const options = {
       title: {
@@ -32,4 +32,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Graph
