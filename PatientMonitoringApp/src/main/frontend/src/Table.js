@@ -14,7 +14,7 @@ class Table extends Component {
     renderTableHeader() {
         console.log(this.state.tableView)
         if (this.state.tableView .match('Cholesterol Graph')) {
-            return <Graph/>
+            return <Graph monitoredPatientList={this.props.monitoredPatientList} />
         } else if (this.state.tableView.match('Cholesterol Table')){
             return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th><th key={3}>EXTRA</th></tr>
         } else if (this.state.tableView.match('Blood Pressure Table')){
@@ -54,12 +54,14 @@ class Table extends Component {
                     {this.state.tableView.length?this.state.tableView:'no view'}
                 </h1>
             </div>
-
+            
             <div style={{ height: '80vh', overflow: 'auto' }}>
                 <table id='patients'>
                     <tbody>
                         {this.renderTableHeader()}
                         {/* {this.state.search && this.getPatientCholesterol()} */}
+
+
                         {!!this.props.monitoredPatientList.length && this.props.monitoredPatientList.map(function (patientObject) {
                             return (
                                 <tr>
@@ -79,6 +81,6 @@ class Table extends Component {
 
 
     }
-}
 
+}
 export default Table
