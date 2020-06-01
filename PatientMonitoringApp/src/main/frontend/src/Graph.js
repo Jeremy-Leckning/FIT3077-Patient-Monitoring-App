@@ -4,21 +4,44 @@ import CanvasJSReact from './canvasjs.react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
+// class dataPoint {
+//   constructor(label, y) {
+//     this.label = label;
+//     this.y = y;
+//   }
+// }
 
 class Graph extends Component {	
+    constructor(props) {
+        super(props);
+        this.generateDataPoints = this.generateDataPoints.bind(this);
+    }
+
+    generateDataPoints() {
+      var dataPoints = [];
+      var labelVal = "";
+      var yVal = 0;
+      {this.props.monitoredPatientList.map(function(patientObject){
+        labelVal = patientObject.patientName;
+        yVal = patientObject.data.cholesterolValue;
+        dataPoints.push({label: labelVal, y: yVal})
+      })}
+      return dataPoints
+    }
+
   render() {
     const options = {
+      theme: "dark2", // Different themes available: "light1", "dark1", "dark2"
+			animationEnabled: true,
+      zoomEnabled: true,
+      width:1100,
       title: {
-        text: "Total Cholesterol mg/dL"
+        text: "Total Cholesterol mg/dL",
       },
+    
       data: [{				
                 type: "column",
-                dataPoints: [
-                    { label: "Jane",  y: 150 },
-                    { label: "Tom", y: 100  },
-                    { label: "Sara", y: 200  },
-                    { label: "Sam",  y: 170  }
-                ]
+                dataPoints: this.generateDataPoints()
        }]
    }
 		
