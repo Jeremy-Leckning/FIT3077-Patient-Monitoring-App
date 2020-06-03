@@ -16,6 +16,7 @@ public class ApplicationController {
     private PatientEncounter patientEncounter = new PatientEncounterService();
     private PatientInfo patientInfo = new PatientInfoService();
     private PatientCholesterol patientCholesterol = new PatientCholesterolService();
+    private PatientBloodPressure patientBloodPressure = new PatientBloodPressureService();
 
     @Autowired
     public ApplicationController(HealthPractitioner healthPractitioner) {
@@ -42,5 +43,10 @@ public class ApplicationController {
     @RequestMapping("/patient-cholesterol")
     public String getPatientCholesterol(@RequestParam(name="patientId", required = true) String patientId) throws IOException {
         return patientCholesterol.getCholesterol(patientId);
+    }
+
+    @RequestMapping("/patient-bloodPressure")
+    public String getPatientBloodPressure(@RequestParam(name="patientId", required = true) String patientId) throws IOException {
+        return patientBloodPressure.getBloodPressure(patientId);
     }
 }

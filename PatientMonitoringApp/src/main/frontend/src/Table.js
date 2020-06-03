@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import './table.css'
 import Graph from './Graph'
+import CholesterolTable from './CholesterolTable';
+import BloodPressureTable from './BloodPressureTable';
+import CombinedTable from './CombinedTable';
 
 class Table extends Component {
     constructor(props) {
@@ -14,7 +17,7 @@ class Table extends Component {
     renderTableHeader() {
         console.log(this.state.tableView)
         if (this.state.tableView .match('Cholesterol Graph')) {
-            return <Graph monitoredPatientList={this.props.monitoredPatientList} />
+            return
         } else if (this.state.tableView.match('Cholesterol Table')){
             return <tr><th key={0}>NAME</th> <th key={1}>CHOLESTEROL</th> <th key={2}>DATE</th><th key={3}>EXTRA</th></tr>
         } else if (this.state.tableView.match('Blood Pressure Table')){
@@ -34,6 +37,23 @@ class Table extends Component {
         this.setState({
             tableView: title
         })
+    }
+
+    renderTableData() {
+        if (this.state.tableView .match('Cholesterol Graph')) {
+            return <Graph monitoredPatientList={this.props.monitoredPatientList} />
+        } else if (this.state.tableView.match('Cholesterol Table')){
+            return <CholesterolTable monitoredPatientList={this.props.monitoredPatientList} averageCholesterol={this.props.averageCholesterol} />
+        } else if (this.state.tableView.match('Blood Pressure Table')){
+            return <BloodPressureTable monitoredPatientList={this.props.monitoredPatientList} />
+        } else if (this.state.tableView.match('Combined Table')){
+            return <CombinedTable monitoredPatientList={this.props.monitoredPatientList} averageCholesterol={this.props.averageCholesterol} />
+        }  else if (this.state.tableView.match('Blood Pressure Graph')){
+            return <h1>SHOW BP GRAPH HERE</h1>
+        }
+        else {
+            return <h1>No view</h1>
+        }
     }
 
     render() {
@@ -59,21 +79,7 @@ class Table extends Component {
                 <table id='patients'>
                     <tbody>
                         {this.renderTableHeader()}
-                        {/* {this.state.search && this.getPatientCholesterol()} */}
-
-
-                        {!!this.props.monitoredPatientList.length && this.props.monitoredPatientList.map(function (patientObject) {
-                            return (
-                                <tr>
-                                    <td>{patientObject.patientName}</td>
-                                    <td style={patientObject.data.cholesterolValue > this.props.averageCholesterol ? { color: "red" } : { color: "black" }}>{patientObject.data ? patientObject.data.cholesterolValue : "-"}</td>
-                                    <td>{patientObject.data ? patientObject.data.effectiveDateTime : "-"}</td>
-                                    <td><button onClick={() => alert("Patient ID: " + patientObject.patientId + "\nBirth Date: " + patientObject.info.birthDate + "\nGender: " + patientObject.info.gender + "\nAddress: " + patientObject.info.address)}>Get Patient Details</button></td>
-                                </tr>
-                            )
-                        }, this)}
-                        <tr>
-                        </tr>
+                        {this.renderTableData()}
                     </tbody>
                 </table>
             </div>
