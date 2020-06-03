@@ -50,18 +50,21 @@ class App extends Component {
       console.log("adding patient to monitor")
       let urlOne = "http://localhost:8080/api/v1/patient-cholesterol?patientId=" + JSON.parse(patient).patientId
       let urlTwo = "http://localhost:8080/api/v1/patient-data?patientId=" + JSON.parse(patient).patientId
+      let urlThree = "http://localhost:8080/api/v1/patient-bloodPressure?patientId=" + JSON.parse(patient).patientId
 
       const requestOne = axios.get(urlOne)
       const requestTwo = axios.get(urlTwo)
+      const requestThree = axios.get(urlThree)
 
-      await axios.all([requestOne, requestTwo]).then(axios.spread((...responses) => {
+      await axios.all([requestOne, requestTwo, requestThree]).then(axios.spread((...responses) => {
         const resOne = responses[0]
         const resTwo = responses[1]
+        const resThree = responses[2]
 
         this.setState({
-          monitoredPatientList: [...this.state.monitoredPatientList, { patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, data: resOne.data, info: resTwo.data }]
+          monitoredPatientList: [...this.state.monitoredPatientList, { patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, cholesterolData: resOne.data, bloodPressureData: resThree.data, info: resTwo.data }]
         })
-
+        console.log(this.state.monitoredPatientList)
 
         for (var i = 0; i < this.state.patientList.length; i++) {
           if (this.state.patientList[i].patientId === JSON.parse(patient).patientId) {
@@ -97,7 +100,10 @@ class App extends Component {
     this.state.monitoredPatientList.forEach(function (arrayItem) {
       var patientId = arrayItem.patientId;
       axios.get("http://localhost:8080/api/v1/patient-cholesterol?patientId=" + patientId).then(res => {
-        arrayItem.data = res.data
+        arrayItem.cholesterolData = res.data
+      }).catch(err => { alert(err) })
+      axios.get("http://localhost:8080/api/v1/patient-bloodPressure?patientId=" + patientId).then(res => {
+        arrayItem.bloodPressureData = res.data
       }).catch(err => { alert(err) })
     });
     this.calculateAverageCholesterol()
@@ -110,9 +116,9 @@ class App extends Component {
     if (this.state.monitoredPatientList.length) {
       var totalCholesterol = 0
       this.state.monitoredPatientList.forEach(function (arrayItem) {
-        if (arrayItem.data.cholesterolValue !== 0) {
+        if (arrayItem.cholesterolData.cholesterolValue !== 0) {
           monitoredPatientListLength += 1
-          totalCholesterol += arrayItem.data.cholesterolValue;
+          totalCholesterol += arrayItem.cholesterolData.cholesterolValue;
         }
       })
       calculatedAverageCholesterol = totalCholesterol / monitoredPatientListLength
@@ -121,6 +127,7 @@ class App extends Component {
     this.setState({
       averageCholesterol: calculatedAverageCholesterol
     })
+    console.log(this.state.averageCholesterol)
   }
 
   render() {

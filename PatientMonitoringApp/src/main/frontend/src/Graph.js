@@ -23,7 +23,7 @@ class Graph extends Component {
       var yVal = 0;
       {this.props.monitoredPatientList.map(function(patientObject){
         labelVal = patientObject.patientName;
-        yVal = patientObject.data.cholesterolValue;
+        yVal = patientObject.cholesterolData.cholesterolValue;
         dataPoints.push({label: labelVal, y: yVal})
       })}
       return dataPoints
