@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
-import CanvasJSReact from './canvasjs.react';
+import CanvasJSReact from '../canvasjs.react';
 //var CanvasJSReact = require('./canvasjs.react');
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-// class dataPoint {
-//   constructor(label, y) {
-//     this.label = label;
-//     this.y = y;
-//   }
-// }
 
 class Graph extends Component {	
     constructor(props) {

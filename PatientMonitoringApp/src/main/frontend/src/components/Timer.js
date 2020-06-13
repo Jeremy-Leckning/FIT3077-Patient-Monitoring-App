@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import './App.css';
+import '../App.css';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card } from 'react-bootstrap';
 
 class Timer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cholesterolUpdateFrequency: 30,
+            cholesterolUpdateFrequency: localStorage.getItem("frequency")?localStorage.getItem("frequency"):30,
             updatingCholesterolFrequency: false,
             time: 0
         };
@@ -17,7 +18,7 @@ class Timer extends Component {
     updateMonitoredFrequency() {
         this.setState({
             time: this.state.cholesterolUpdateFrequency
-        })
+        }, ()=> {localStorage.setItem("frequency", this.state.cholesterolUpdateFrequency)})
     }
 
     handleChange = (e) => {
@@ -55,23 +56,30 @@ class Timer extends Component {
         }, 1000);
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.updatingCholesterolFrequencyChange();
+    }
+
     render() {
         if (!this.timer) {
             this.refreshTimer()
         }
         return (
             <div className="App">
-                <label>Cholesterol Update Frequency in seconds:
-                {' '}
-                    {!this.state.updatingCholesterolFrequency && this.state.cholesterolUpdateFrequency}
-                    {!!this.state.updatingCholesterolFrequency &&
-                        <label>
-                            <input type="number" id="quantity" name="quantity" min="0" value={this.state.cholesterolUpdateFrequency} onChange={this.handleChange} />
-                        </label>}
-                    <button onClick={this.updatingCholesterolFrequencyChange}>Update</button>
-
-                </label>
-                <h3>Refresh Timer(s): {this.state.time}</h3>
+                <Form inline onSubmit={this.handleSubmit}>
+                    <Form.Row>
+                        <Col xs="auto">
+                            {!!this.state.updatingCholesterolFrequency ?
+                                <Form.Control min="0" value={this.state.cholesterolUpdateFrequency} required onChange={this.handleChange} type="number" placeholder="Time in seconds" />
+                                :<h4>Refresh Timer(s): {this.state.time}</h4>
+                            }
+                        </Col>
+                        <Col>
+                            <Button variant="primary" type="submit">Update</Button>
+                        </Col>
+                    </Form.Row>
+                </Form>
             </div>
         );
     }

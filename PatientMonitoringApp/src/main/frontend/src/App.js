@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
 import './App.css';
-import Search from './Search'
-import Table from './Table'
-import Timer from './Timer'
+import Search from './components/Search'
+import Patient from './components/Patient'
+import CholesterolTable from './components/CholesterolTable'
+import CombinedTable from './components/CombinedTable'
+import PatientData from './components/PatientData'
+import BloodPressureLimit from './components/BloodPressureLimit'
+import Graph from './components/Graph'
+import Timer from './components/Timer'
 import axios from "axios"
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card } from 'react-bootstrap';
+import BloodPressureTable from './components/BloodPressureTable';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +20,8 @@ class App extends Component {
       patientList: [],
       monitoredPatientList: [],
       patientInfo: [],
-      averageCholesterol: 0
+      averageCholesterol: 0,
+      updatingXY: false
     };
     this.updatePractitionerIdentifier = this.updatePractitionerIdentifier.bind(this);
     this.updatePatientList = this.updatePatientList.bind(this);
@@ -130,28 +138,59 @@ class App extends Component {
     console.log(this.state.averageCholesterol)
   }
 
+  updateXY = () => {
+    this.setState({updatingXY: !this.state.updatingXY})
+  }
+
   render() {
     return (
-      <div className="App" style={{ width: '100%' }}>
-        <div style={{ float: 'left', width: '35vw' }}>
-          <Search practitionerIdentifier={this.state.practitionerIdentifier}
-            updatePractitionerIdentifier={this.updatePractitionerIdentifier}
-            patientList={this.state.patientList}
-            updatePatientList={this.updatePatientList}
-            updateMonitoredPatientList={this.updateMonitoredPatientList} />
-        </div>
+      <div>
+        <Navbar bg="light" expand="lg">
+          <Navbar.Brand href="#home">Patient Monitoring App</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+            </Nav>
+            <Form inline>
+              {!!this.state.monitoredPatientList.length && <Timer updateMonitoredPatientCholesterol={this.updateMonitoredPatientCholesterol} />}
+            </Form>
+          </Navbar.Collapse>
+        </Navbar>
+        <br />
+        <Search
+          practitionerIdentifier={this.state.practitionerIdentifier}
+          updatePractitionerIdentifier={this.updatePractitionerIdentifier}
+          patientList={this.state.patientList}
+          updatePatientList={this.updatePatientList}
+          updateMonitoredPatientList={this.updateMonitoredPatientList}
+        />
+        {!!this.state.monitoredPatientList.length && <BloodPressureLimit updateXY={this.updateXY} updatingXY={this.state.updatingXY}/>}
+        <Tabs defaultActiveKey="allPatients" id="uncontrolled-tab-example">
+          <Tab eventKey="allPatients" title="All Patients">
+            <Patient
+              patientList={this.state.patientList}
+              updateMonitoredPatientList={this.updateMonitoredPatientList}
+            />
+          </Tab>
+          <Tab eventKey="cholesterolTable" title="Cholesterol Table">
+            <CholesterolTable monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
+          </Tab>
+          <Tab eventKey="cholesterolGraph" title="Cholesterol Graph">
+            <Graph monitoredPatientList={this.state.monitoredPatientList} />
+          </Tab>
+          <Tab eventKey="bloodPressureTable" title="Blood Pressure Table">
+            <BloodPressureTable monitoredPatientList={this.state.monitoredPatientList} />
+          </Tab>
+          <Tab eventKey="bloodPressureGraph" title="Blood Pressure Graph">
 
-        <div style={{ float: 'left', width: '60vw' }}>
-          <div style={{ height: '113px' }}>
-            {!!this.state.monitoredPatientList.length && <Timer updateMonitoredPatientCholesterol={this.updateMonitoredPatientCholesterol} />}
-          </div>
-
-          <Table averageCholesterol={this.state.averageCholesterol} monitoredPatientList={this.state.monitoredPatientList} />
-        </div>
-
-
-
-        {/* <Patient /> */}
+          </Tab>
+          <Tab eventKey="combinedTable" title="Combined Table">
+            <CombinedTable monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
+          </Tab>
+          <Tab eventKey="patientData" title="Patient Data">
+            <PatientData monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
+          </Tab>
+        </Tabs>
       </div>
     );
   }
