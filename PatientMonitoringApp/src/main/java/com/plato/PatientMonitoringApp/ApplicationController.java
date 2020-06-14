@@ -46,7 +46,12 @@ public class ApplicationController {
     }
 
     @RequestMapping("/patient-bloodPressure")
-    public String getPatientBloodPressure(@RequestParam(name="patientId", required = true) String patientId) throws IOException {
+    public String getPatientBloodPressure(@RequestParam(name="patientId", required = true, defaultValue = "29163") String patientId) throws IOException {
         return patientBloodPressure.getBloodPressure(patientId);
+    }
+
+    @RequestMapping("/patient-systolicBloodPressure")
+    public Set<String> getPatientSystolicBP(@RequestParam(name="patientId", required = true, defaultValue = "29163") String patientId) throws IOException {
+        return patientBloodPressure.getLastFiveSystolicBP(patientId);
     }
 }
