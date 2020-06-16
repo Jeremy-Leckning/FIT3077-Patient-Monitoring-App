@@ -196,7 +196,7 @@ class App extends Component {
             <BloodPressureTable monitoredPatientList={this.state.monitoredPatientList} />
           </Tab>
           <Tab eventKey="SystolicBPHistory" title="Systolic Blood Pressure history">
-            <SystolicBloodPressureHistory monitoredPatientList={this.state.monitoredPatientList} />
+            <SystolicBloodPressureHistory/>
           </Tab>
           <Tab eventKey="bloodPressureGraph" title="Blood Pressure Graph">
 
