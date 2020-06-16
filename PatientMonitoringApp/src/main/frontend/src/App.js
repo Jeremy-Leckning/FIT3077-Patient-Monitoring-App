@@ -153,7 +153,7 @@ class App extends Component {
   }
 
   updateXY = () => {
-    this.setState({updatingXY: !this.state.updatingXY})
+    this.setState({updatingXY: !this.state.updatingXY}, ()=> {this.fetchSystolicBP()})
   }
 
   render() {
