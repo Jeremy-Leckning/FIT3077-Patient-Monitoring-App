@@ -50,6 +50,11 @@ public class PatientBloodPressureService implements PatientBloodPressure {
         }
 //        this.systolicBloodPressureRecords.add(Integer.toString(numberRecords));
         String result = "";
+        JSONObject json2 = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Patient/"+patientId+"?_format=json");
+        String firstName = json2.getJSONArray("name").getJSONObject(0).getJSONArray("given").getString(0);
+        String lastName = json2.getJSONArray("name").getJSONObject(0).getString("family");
+        String fullName = firstName + " " + lastName;
+        result = fullName + ": ";
         for (int i = 0; i < numberRecords; i++) {
             String issuedDate = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getString("issued");
             Integer systolicBloodPressure = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getJSONArray("component").getJSONObject(0).getJSONObject("valueQuantity").getInt("value");
