@@ -37,10 +37,10 @@ public class PatientBloodPressureService implements PatientBloodPressure {
     }
 
     @Override
-    public Set<String> getLastFiveSystolicBP(String patientId) throws IOException{
+    public String getLastFiveSystolicBP(String patientId) throws IOException{
         JSONObject json = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Observation?_count=10&code=55284-4&patient="+
                 patientId+"&_sort=-date&_format=json");
-
+        systolicBloodPressureRecords = new HashSet<String>();
         int numberRecords = 0;
         if (json.getInt("total") >= 5) {
             numberRecords = 5;
@@ -48,18 +48,21 @@ public class PatientBloodPressureService implements PatientBloodPressure {
         else {
             numberRecords = json.getInt("total");
         }
-        this.systolicBloodPressureRecords.add(Integer.toString(numberRecords));
-
+//        this.systolicBloodPressureRecords.add(Integer.toString(numberRecords));
+        String result = "";
         for (int i = 0; i < numberRecords; i++) {
             String issuedDate = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getString("issued");
             Integer systolicBloodPressure = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getJSONArray("component").getJSONObject(0).getJSONObject("valueQuantity").getInt("value");
 
+            result += systolicBloodPressure + " (" + issuedDate + "), ";
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("systolicBloodPressure", systolicBloodPressure);
             jsonObject.put("issued", issuedDate);
             this.systolicBloodPressureRecords.add(jsonObject.toString());
         }
-        return this.systolicBloodPressureRecords;
+
+//        return this.systolicBloodPressureRecords;
+        return result;
     }
 }
 

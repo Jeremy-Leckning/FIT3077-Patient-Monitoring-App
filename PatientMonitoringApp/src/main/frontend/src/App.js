@@ -6,12 +6,14 @@ import CholesterolTable from './components/CholesterolTable'
 import CombinedTable from './components/CombinedTable'
 import PatientData from './components/PatientData'
 import BloodPressureLimit from './components/BloodPressureLimit'
-import Graph from './components/Graph'
+import CholesterolGraph from './components/CholesterolGraph'
 import Timer from './components/Timer'
 import axios from "axios"
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card } from 'react-bootstrap';
 import BloodPressureTable from './components/BloodPressureTable';
+import SystolicBloodPressureHistory from './components/SystolicBloodPressureHistory';
 
+var bpString = "";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +29,23 @@ class App extends Component {
     this.updatePatientList = this.updatePatientList.bind(this);
     this.updateMonitoredPatientList = this.updateMonitoredPatientList.bind(this);
   }
+
+  fetchSystolicBP() {
+    {!!this.state.monitoredPatientList.length && this.state.monitoredPatientList.map((patientObject) => {
+        if (localStorage.getItem("systolicX") < patientObject.bloodPressureData.systolicBloodPressure){
+            // {this.fetchSystolicBP(patientObject.patientId)}
+            axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId).then(res => {
+                bpString += res.data + "\n"
+                // localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n")
+
+            })
+        }})}
+    console.log(bpString)
+
+    localStorage.setItem("monitoredBP", bpString ) 
+    bpString = ""
+    console.log("fetch function called")
+}
 
   // Updates identifier
   updatePractitionerIdentifier(identifier) {
@@ -72,7 +91,6 @@ class App extends Component {
         this.setState({
           monitoredPatientList: [...this.state.monitoredPatientList, { patientName: JSON.parse(patient).patientName, patientId: JSON.parse(patient).patientId, cholesterolData: resOne.data, bloodPressureData: resThree.data, info: resTwo.data }]
         })
-        console.log(this.state.monitoredPatientList)
 
         for (var i = 0; i < this.state.patientList.length; i++) {
           if (this.state.patientList[i].patientId === JSON.parse(patient).patientId) {
@@ -81,6 +99,7 @@ class App extends Component {
           }
         }
         this.calculateAverageCholesterol()
+        this.fetchSystolicBP()
       })
       ).catch(err => { alert(err) })
 
@@ -91,7 +110,7 @@ class App extends Component {
       var pos = array.map(function (e) { return e.patientId; }).indexOf(JSON.parse(patient).patientId);
       if (pos !== -1) {
         array.splice(pos, 1);
-        this.setState({ monitoredPatientList: array }, () => { this.calculateAverageCholesterol() });
+        this.setState({ monitoredPatientList: array }, () => { this.calculateAverageCholesterol(); this.fetchSystolicBP(); });
 
         array = [...this.state.patientList]
         pos = array.map(function (e) { return e.patientId; }).indexOf(JSON.parse(patient).patientId);
@@ -115,6 +134,7 @@ class App extends Component {
       }).catch(err => { alert(err) })
     });
     this.calculateAverageCholesterol()
+    this.fetchSystolicBP()
   }
 
   // Gets the average cholesterol of all the patients being monitored (except those that have no cholesterol)
@@ -176,10 +196,13 @@ class App extends Component {
             <CholesterolTable monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
           </Tab>
           <Tab eventKey="cholesterolGraph" title="Cholesterol Graph">
-            <Graph monitoredPatientList={this.state.monitoredPatientList} />
+            <CholesterolGraph monitoredPatientList={this.state.monitoredPatientList} />
           </Tab>
           <Tab eventKey="bloodPressureTable" title="Blood Pressure Table">
             <BloodPressureTable monitoredPatientList={this.state.monitoredPatientList} />
+          </Tab>
+          <Tab eventKey="SystolicBPHistory" title="Systolic Blood Pressure history">
+            <SystolicBloodPressureHistory monitoredPatientList={this.state.monitoredPatientList} />
           </Tab>
           <Tab eventKey="bloodPressureGraph" title="Blood Pressure Graph">
 
@@ -190,6 +213,7 @@ class App extends Component {
           <Tab eventKey="patientData" title="Patient Data">
             <PatientData monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
           </Tab>
+
         </Tabs>
       </div>
     );

@@ -4,7 +4,7 @@ import CanvasJSReact from '../canvasjs.react';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class Graph extends Component {	
+class CholesterolGraph extends Component {	
     constructor(props) {
         super(props);
         this.generateDataPoints = this.generateDataPoints.bind(this);
@@ -27,7 +27,7 @@ class Graph extends Component {
       theme: "dark2", // Different themes available: "light1", "dark1", "dark2"
 			animationEnabled: true,
       zoomEnabled: true,
-      width:1100,
+      width: 1500,
       title: {
         text: "Total Cholesterol mg/dL",
       },
@@ -48,4 +48,4 @@ class Graph extends Component {
   }
 }
 
-export default Graph
+export default CholesterolGraph
