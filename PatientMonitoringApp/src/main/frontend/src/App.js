@@ -13,7 +13,6 @@ import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Ju
 import BloodPressureTable from './components/BloodPressureTable';
 import SystolicBloodPressureHistory from './components/SystolicBloodPressureHistory';
 
-var bpString = "";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -31,19 +30,14 @@ class App extends Component {
   }
 
   fetchSystolicBP() {
+    localStorage.setItem("monitoredBP", "" ) 
     {!!this.state.monitoredPatientList.length && this.state.monitoredPatientList.map((patientObject) => {
         if (localStorage.getItem("systolicX") < patientObject.bloodPressureData.systolicBloodPressure){
             // {this.fetchSystolicBP(patientObject.patientId)}
             axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId).then(res => {
-                bpString += res.data + "\n"
-                // localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n")
-
+                localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n" ) 
             })
         }})}
-    console.log(bpString)
-
-    localStorage.setItem("monitoredBP", bpString ) 
-    bpString = ""
     console.log("fetch function called")
 }
 
