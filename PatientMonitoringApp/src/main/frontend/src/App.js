@@ -12,6 +12,8 @@ import axios from "axios"
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card } from 'react-bootstrap';
 import BloodPressureTable from './components/BloodPressureTable';
 import SystolicBloodPressureHistory from './components/SystolicBloodPressureHistory';
+import SystolicBloodPressureGraph from './components/SystolicBloodPressureGraph';
+
 
 class App extends Component {
   constructor(props) {
@@ -27,13 +29,13 @@ class App extends Component {
     this.updatePractitionerIdentifier = this.updatePractitionerIdentifier.bind(this);
     this.updatePatientList = this.updatePatientList.bind(this);
     this.updateMonitoredPatientList = this.updateMonitoredPatientList.bind(this);
+    // this.fetchSystolicBP = this.fetchSystolicBP.bind(this);
   }
 
   fetchSystolicBP() {
     localStorage.setItem("monitoredBP", "" ) 
     {!!this.state.monitoredPatientList.length && this.state.monitoredPatientList.map((patientObject) => {
         if (localStorage.getItem("systolicX") < patientObject.bloodPressureData.systolicBloodPressure){
-            // {this.fetchSystolicBP(patientObject.patientId)}
             axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId).then(res => {
                 localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n" ) 
             })
@@ -199,7 +201,7 @@ class App extends Component {
             <SystolicBloodPressureHistory/>
           </Tab>
           <Tab eventKey="bloodPressureGraph" title="Blood Pressure Graph">
-
+            <SystolicBloodPressureGraph/>
           </Tab>
           <Tab eventKey="combinedTable" title="Combined Table">
             <CombinedTable monitoredPatientList={this.state.monitoredPatientList} averageCholesterol={this.state.averageCholesterol} />
