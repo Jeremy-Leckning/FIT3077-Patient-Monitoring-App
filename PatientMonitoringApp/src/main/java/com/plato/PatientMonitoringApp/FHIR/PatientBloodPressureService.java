@@ -59,11 +59,18 @@ public class PatientBloodPressureService implements PatientBloodPressure {
             String issuedDate = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getString("issued");
             Integer systolicBloodPressure = json.getJSONArray("entry").getJSONObject(i).getJSONObject("resource").getJSONArray("component").getJSONObject(0).getJSONObject("valueQuantity").getInt("value");
 
-            result += systolicBloodPressure + " (" + issuedDate + "), ";
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("systolicBloodPressure", systolicBloodPressure);
-            jsonObject.put("issued", issuedDate);
-            this.systolicBloodPressureRecords.add(jsonObject.toString());
+            result += systolicBloodPressure + " (" + issuedDate;
+
+            if (i == numberRecords-1) {
+                result += ")";
+            }
+            else{
+                result += "), ";
+            }
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("systolicBloodPressure", systolicBloodPressure);
+//            jsonObject.put("issued", issuedDate);
+//            this.systolicBloodPressureRecords.add(jsonObject.toString());
         }
 
 //        return this.systolicBloodPressureRecords;
