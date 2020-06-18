@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
-import CanvasJSReact from '../canvasjs.react';
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card, Table } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 
 class BloodPressureLimit extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.updateXY()

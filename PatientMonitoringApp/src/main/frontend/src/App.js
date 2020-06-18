@@ -9,7 +9,7 @@ import BloodPressureLimit from './components/BloodPressureLimit'
 import CholesterolGraph from './components/CholesterolGraph'
 import Timer from './components/Timer'
 import axios from "axios"
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card } from 'react-bootstrap';
+import { Navbar, Nav, Form, Tabs, Tab } from 'react-bootstrap';
 import BloodPressureTable from './components/BloodPressureTable';
 import SystolicBloodPressureHistory from './components/SystolicBloodPressureHistory';
 import SystolicBloodPressureGraph from './components/SystolicBloodPressureGraph';
@@ -29,7 +29,6 @@ class App extends Component {
     this.updatePractitionerIdentifier = this.updatePractitionerIdentifier.bind(this);
     this.updatePatientList = this.updatePatientList.bind(this);
     this.updateMonitoredPatientList = this.updateMonitoredPatientList.bind(this);
-    // this.fetchSystolicBP = this.fetchSystolicBP.bind(this);
   }
 
   fetchSystolicBP() {
@@ -37,10 +36,10 @@ class App extends Component {
     {!!this.state.monitoredPatientList.length && this.state.monitoredPatientList.map((patientObject) => {
         if (localStorage.getItem("systolicX") < patientObject.bloodPressureData.systolicBloodPressure){
             axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId).then(res => {
-                localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n" ) 
+                localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n" );
+                this.forceUpdate()
             })
         }})}
-    console.log("fetch function called")
 }
 
   // Updates identifier
@@ -63,6 +62,8 @@ class App extends Component {
     this.setState({
       patientList: patient
     })
+    localStorage.setItem("monitoredBP", "");
+    this.forceUpdate()
   }
 
   // Updates the monitored patient list, calls cholesterol and data for patient if not in monitored
@@ -151,11 +152,14 @@ class App extends Component {
     this.setState({
       averageCholesterol: calculatedAverageCholesterol
     })
-    console.log(this.state.averageCholesterol)
   }
 
   updateXY = () => {
     this.setState({updatingXY: !this.state.updatingXY}, ()=> {this.fetchSystolicBP()})
+  }
+
+  componentWillMount() {
+    localStorage.setItem("monitoredBP", "");
   }
 
   render() {
