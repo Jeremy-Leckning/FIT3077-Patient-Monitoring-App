@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import axios from "axios"
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card, Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Patient extends Component {

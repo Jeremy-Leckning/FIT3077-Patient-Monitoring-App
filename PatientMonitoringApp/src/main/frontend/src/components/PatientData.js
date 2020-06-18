@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
-import CanvasJSReact from '../canvasjs.react';
-//var CanvasJSReact = require('./canvasjs.react');
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Tabs, Tab, Jumbotron, Container, ListGroup, Row, Card, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 class PatientData extends Component {	
-    constructor(props) {
-        super(props);
-    
-    }
   render() {
     return <div>
         <Table responsive striped bordered hover variant="dark">
