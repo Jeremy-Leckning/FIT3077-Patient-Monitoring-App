@@ -15,7 +15,7 @@ class CholesterolGraph extends Component {
       {this.props.monitoredPatientList.map(function(patientObject){
         labelVal = patientObject.patientName;
         yVal = patientObject.cholesterolData.cholesterolValue;
-        dataPoints.push({label: labelVal, y: yVal})
+        dataPoints.push({label: labelVal, y: yVal, indexLabel: yVal.toString()})
       })}
       return dataPoints
     }
@@ -25,11 +25,11 @@ class CholesterolGraph extends Component {
       theme: "dark2", // Different themes available: "light1", "dark1", "dark2"
 			animationEnabled: true,
       zoomEnabled: true,
-      width: 1500,
+      width: 1600,
+      height: 600,
       title: {
         text: "Total Cholesterol mg/dL",
       },
-    
       data: [{				
                 type: "column",
                 dataPoints: this.generateDataPoints()
@@ -39,7 +39,6 @@ class CholesterolGraph extends Component {
    return (
       <div>
         <CanvasJSChart options = {options}
-            /* onRef = {ref => this.chart = ref} */
         />
       </div>
     );

@@ -39,26 +39,37 @@ class SystolicBloodPressureGraph extends Component {
     let patientData = this.generateDataPoints();
     let graphOptions = [];
 
-    for (var k = 0; k < patientData.length; k++) {
+    for (var k = 0; k < patientData.length-1; k++) {
       let systolicBP = patientData[k].systolicBP;
       let dps = [];
       for (var l = 0; l < systolicBP.length; l++) {
         dps.push({ x: l + 1, y: systolicBP[l] });
       }
       let options = {
-        theme: "light2", // "light1", "dark1", "dark2"
+        theme: "light1", // "light1", "dark1", "dark2"
         animationEnabled: true,
         zoomEnabled: true,
         width: 1500,
         title: {
           text: patientData[k].name,
         },
+        axisX:{
+          title: "Index",
+          interval: 1,
+          minimum: 0,
+          maximum: 5.5   
+        },
         axisY: {
+          title: "Systolic Blood Pressure",
           includeZero: false,
         },
         data: [
           {
             type: "line",
+            lineThickness: 5,
+            markerColor: "orange",
+            markerSize: 2,
+            lineColor:"orange",
             dataPoints: dps,
           },
         ],
