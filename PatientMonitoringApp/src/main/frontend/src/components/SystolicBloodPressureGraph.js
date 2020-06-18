@@ -49,6 +49,7 @@ class SystolicBloodPressureGraph extends Component {
         theme: "light2", // "light1", "dark1", "dark2"
         animationEnabled: true,
         zoomEnabled: true,
+        width: 1500,
         title: {
           text: patientData[k].name,
         },
