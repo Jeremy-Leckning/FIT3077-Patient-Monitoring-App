@@ -31,15 +31,22 @@ class App extends Component {
     this.updateMonitoredPatientList = this.updateMonitoredPatientList.bind(this);
   }
 
-  fetchSystolicBP() {
-    localStorage.setItem("monitoredBP", "" ) 
+  fetchSystolicBP = async (patientObject) => {
+    localStorage.setItem("monitoredBP", "")
+    let axiosResponseArray = []
     {!!this.state.monitoredPatientList.length && this.state.monitoredPatientList.map((patientObject) => {
         if (localStorage.getItem("systolicX") < patientObject.bloodPressureData.systolicBloodPressure){
-            axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId).then(res => {
-                localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + res.data + "\n" );
-                this.forceUpdate()
-            })
-        }})}
+              axiosResponseArray.push(axios.get("http://localhost:8080/api/v1/patient-systolicBloodPressure?patientId=" + patientObject.patientId))
+            }
+        })}
+
+    await axios.all(axiosResponseArray).then(axios.spread((...responses) => {
+
+      for (let i=0; i<responses.length; i++){
+        localStorage.setItem("monitoredBP", localStorage.getItem("monitoredBP") + responses[i].data + "\n" );
+        this.forceUpdate()
+     }
+    }))    
 }
 
   // Updates identifier
