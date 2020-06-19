@@ -5,7 +5,7 @@ class SystolicBloodPressureHistory extends Component {
     let monitoredBpText = localStorage
       .getItem("monitoredBP")
       .split("\n")
-      .map((item, i) => <div key={i}>{item}</div>);
+      .map((item, i) => <div key={i}>{item}<br></br><br></br></div>);
     return monitoredBpText;
   }
 
