@@ -48,7 +48,7 @@ public class PatientBloodPressureService implements PatientBloodPressure {
         else {
             numberRecords = json.getInt("total");
         }
-//        this.systolicBloodPressureRecords.add(Integer.toString(numberRecords));
+
         String result = "";
         JSONObject json2 = HttpService.readJsonFromUrl("https://fhir.monash.edu/hapi-fhir-jpaserver/fhir/Patient/"+patientId+"?_format=json");
         String firstName = json2.getJSONArray("name").getJSONObject(0).getJSONArray("given").getString(0);
@@ -67,13 +67,7 @@ public class PatientBloodPressureService implements PatientBloodPressure {
             else{
                 result += "), ";
             }
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("systolicBloodPressure", systolicBloodPressure);
-//            jsonObject.put("issued", issuedDate);
-//            this.systolicBloodPressureRecords.add(jsonObject.toString());
         }
-
-//        return this.systolicBloodPressureRecords;
         return result;
     }
 }
