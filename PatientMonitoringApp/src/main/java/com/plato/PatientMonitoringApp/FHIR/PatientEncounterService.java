@@ -22,7 +22,8 @@ public class PatientEncounterService implements PatientEncounter {
         int count_page = 0;
         int count_patient = 0;
 
-        while (next_page && count_page<2) {
+//      while (next_page && count_page<2) {
+        while (next_page) {
             JSONObject json = HttpService.readJsonFromUrl(next_url);
             next_page = false;
 

@@ -63,8 +63,8 @@ class Search extends Component {
                             <Col xs={7}>
                                 <Form.Control value={this.props.practitionerIdentifier} required onChange={this.updatepractitionerIdentifier} type="text" placeholder="Enter your Health Practitioner Identifier" />
                             </Col>
-                            <Button variant="primary" type="submit">
-                                Submit
+                            <Button disabled={this.state.isLoading} variant="primary" type="submit" >
+                                {this.state.isLoading ? 'Loading…' : 'Submit'}
                             </Button>
                         </Form.Row>
                     </Form.Group>
